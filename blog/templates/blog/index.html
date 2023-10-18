@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    <h1>Blog Posts</h1>
+{% endblock %}
+
+{% block page_content %}
+    {% for post in posts %}
+        <h3><a href="{% url 'blog_detail' post.id %}">{{ post.title }}</a></h3>
+        <small>
+            {{ post.created_on.date }} | Categorites:
+            {% for category in post.categories.all %}
+                <a href="{% url 'blog_category' category.name %}">{{ category.name }}</a>
+            {% endfor %}
+        </small>
+        <p>{{ post.body | slice:":400"}}...</p>
+    {% empty %}
+        <p>There are no posts yet.</p>
+    {% endfor %}
+{% endblock %}

@@ -21,6 +21,7 @@ class PostAdmin(admin.ModelAdmin):
         "last_modified",
     )
     fields = (
+        "author",
         "title",
         "body",
         "categories",

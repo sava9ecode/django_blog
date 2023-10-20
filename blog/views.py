@@ -1,8 +1,11 @@
+from django.urls import reverse
+from django.shortcuts import redirect
+from django.contrib.auth import login
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
-from .forms import CommentForm
 from .models import Post, Comment, Category
+from .forms import CommentForm, CustomUserCreationForm
 
 
 def blog_index(request):
@@ -41,7 +44,7 @@ def blog_detail(request, pk):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = Comment(
-                author=form.cleaned_data["author"],
+                author=request.user,
                 body=form.cleaned_data["body"],
                 post=post,
             )
@@ -55,3 +58,14 @@ def blog_detail(request, pk):
         "form": form,
     }
     return render(request, "blog/detail.html", context)
+
+
+def register(request):
+    form = CustomUserCreationForm()
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect(reverse("index"))
+    return render(request, "blog/register.html", {"form": form})

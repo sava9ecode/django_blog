@@ -23,6 +23,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def len_above_max(self):
+        return len(self.body) > 400
 
 
 class Comment(models.Model):

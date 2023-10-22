@@ -1,13 +1,32 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block page_title %}
-    <h1 class="my-5">Blog Categories</h1>
+    <h2 class="my-3">Choose category you're interested in:</h2>
 {% endblock %}
 
 {% block page_content %}
-    <ul>
-    {% for category in categories %}
-        <li><a href="{% url 'blog_category' category.name %}">{{ category.name }}</a></li>
-    {% endfor %}
-    </ul>
+    <div class="row">
+        <ul class="col-6 list-group">
+            {% for category in categories %}
+            <li class="list-group-item d-flex justify-content-between align-items-center" onclick="location.href='{% url 'blog_category' category.name %}'">
+                {{ category.name }}
+                <span class="badge bg-dark rounded-pill">{{ category.posts.count }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="col-3">
+            {% if user.is_authenticated %}
+            <h3 class="">Add category:</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div>{{ form|crispy }}</div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-success mt-2" type="submit">Submit</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

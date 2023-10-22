@@ -1,18 +1,36 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block page_title %}
-    <h1 class="my-5">Blog Posts</h1>
+    <h1>Blog Posts</h1>
 {% endblock %}
 
 {% block page_content %}
-    {% for post in posts %}
-        <h3 class="mt-5"><a href="{% url 'blog_detail' post.id %}">{{ post.title }}</a></h3>
-        <small>
-            {{ post.created_on.date }} | Categorites:
-            {% for category in post.categories.all %}
-                <a href="{% url 'blog_category' category.name %}">{{ category.name }}</a>
+    <div class="row">
+        <div class="col-8 mt-5">
+            {% for post in posts %}
+                <h3><a href="{% url 'blog_detail' post.id %}" class="link-dark">{{ post.title }}</a></h3>
+                <small>
+                    {{ post.created_on.date }} | Categorites:
+                    {% for category in post.categories.all %}
+                        <a href="{% url 'blog_category' category.name %}" class="link-info">{{ category.name }}</a>
+                    {% endfor %}
+                </small>
+                <p class="mt-2 mb-5">{{ post.body | slice:":400"}}{% if post.len_above_max %}..{% endif %}</p>
             {% endfor %}
-        </small>
-        <p class="mt-2">{{ post.body | slice:":400"}}{% if post.len_above_max %}..{% endif %}</p>
-    {% endfor %}
+        </div>
+        <div class="col-4 mt-5">
+            {% if user.is_authenticated %}
+                <h3 class="text-center">Share your ideas:</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success" type="submit">Submit</button>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

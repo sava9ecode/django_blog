@@ -8,13 +8,13 @@
     <small>
         {{ post.created_on.date }} | Categories:
         {% for category in post.categories.all %}
-            <a href="{% url 'blog_category' category.name %}">{{ category.name }}</a>
+            <a href="{% url 'blog_category' category.name %}" class="link-info">{{ category.name }}</a>
         {% endfor %}
     </small>
     <p>{{ post.body | linebreaks }}</p>
 
     {% if user.is_authenticated %}
-        <h3 class="mt-5">Leave a comment:</h3>
+        <h3 class="mt-2">Leave a comment:</h3>
         <form class="w-50" method="post">
             {% csrf_token %}
             <div>{{ form.body }}</div>
@@ -24,11 +24,11 @@
 
     <h3 class="mt-2">Comments:</h3>
     {% for comment in comments %}
-        <p>
-            On {{ comment.created_on.date }} <b>{{ comment.author }}</b> wrote:
-        </p>
-        <p>
-            {{ comment.body | linebreaks }}
-        </p>
+        <div class="row">
+            <p>
+                On {{ comment.created_on.date }} <b>{{ comment.author }}</b> wrote:
+                {{ comment.body | linebreaks }}
+            </p>
+        </div>
     {% endfor %}
 {% endblock %}

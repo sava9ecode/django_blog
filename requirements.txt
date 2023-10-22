@@ -1,0 +1,6 @@
+Django>=4.2.6
+asgiref>=3.7.2
+sqlparse>=0.4.4
+python-environ>=0.4.54
+crispy-bootstrap5>=0.7
+django-crispy-forms>=2.1

@@ -52,15 +52,19 @@
 
         <main>
             <div class="container my-5">
-                {% block page_title %}{% endblock page_title %}
-                {% block page_content %}{% endblock page_content %}
+                <div class="row">
+                    {% block page_title %}{% endblock page_title %}
+                </div>
+                <div class="row">
+                    {% block page_content %}{% endblock page_content %}
+                </div>
             </div>
         </main>
 
         <footer class="bg-dark text-center text-lg-start">
             <div class="text-center text-white p-3">
               © 2023 Copyright:
-              <a class="text-white" href="#">awesome.com</a>
+              <a class="text-white" href="{% url 'index' %}">AwesomeBlog.com</a>
             </div>
         </footer>
 

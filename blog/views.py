@@ -5,21 +5,47 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from .models import Post, Comment, Category
-from .forms import CommentForm, CustomUserCreationForm
+from .forms import CommentForm, CustomUserCreationForm, CategoryForm, PostForm
 
 
 def blog_index(request):
+    form = PostForm()
+
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = Post.objects.create(
+                author=request.user,
+                title=form.cleaned_data["title"],
+                body=form.cleaned_data["body"],
+            )
+            post.categories.set(form.cleaned_data["categories"])
+            post.save()
+            return redirect("index")
+
     posts = Post.objects.all().order_by("-created_on")
     context = {
         "posts": posts,
+        "form": form,
     }
 
     return render(request, "blog/index.html", context)
 
 
 def blog_categories(request):
+    form = CategoryForm()
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            new_categoty = Category(name=form.cleaned_data["name"])
+            new_categoty.save()
+            return redirect("categories")
+        
     categories = Category.objects.all()
-    context = {"categories": categories}
+    context = {
+        "categories": categories,
+        "form": form
+    }
 
     return render(request, "blog/categories.html", context)
 

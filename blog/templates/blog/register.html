@@ -1,18 +1,15 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block page_title %}
     <h2 class="my-3">Register</h2>
 {% endblock %}
 
 {% block page_content %}
-    <form method="post">
+    <form method="post" class="w-25">
         {% csrf_token %}
-        {% for field in form %}
-            <div class="fieldWrapper">
-                {{ field.errors }}
-                <label class="form-label">{{ field.label_tag }}</label> {{ field }}
-            </div>
-        {% endfor %}
+        {{ form|crispy }}
         <button class="btn btn-default btn-primary" type="submit">Register</button>
         <a class="btn btn-default btn-primary" href="{% url 'login' %}">Back to login</a>
     </form>
